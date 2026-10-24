@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
@@ -50,6 +50,37 @@ def home():
     return {"message" : "Welcome to Study Planner API"}
 
 @app.get("/tasks")
-def get_tasks():
-    return tasks
+def get_tasks(
+    subject: str = None,
+    completed: bool = None,
+    search: str = None
+):
+    filtered_tasks = tasks
 
+    if subject:
+        filtered_tasks = [
+            task for task in filtered_tasks
+            if task["subject"].lower() == subject.lower()
+        ]
+
+    if completed is not None:
+        filtered_tasks = [
+            task for task in filtered_tasks
+            if task["completed"] == completed
+        ]
+
+    if search:
+        filtered_tasks = [
+            task for task in filtered_tasks
+            if search.lower() in task["title"].lower()
+        ]
+
+    return filtered_tasks
+
+@app.get("/tasks/{task_id}")
+def get_task(task_id: int):
+    for task in tasks:
+        if task["id"] == task_id:
+            return task
+
+    raise HTTPException(status_code=404, detail="Task not found")
