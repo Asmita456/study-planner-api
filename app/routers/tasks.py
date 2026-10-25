@@ -133,7 +133,6 @@ def get_task_summary():
         "remaining_estimated_minutes": remaining_estimated_minutes
     }
 
-
 @router.get("/{task_id}")
 def get_task(task_id: int):
     for task in tasks:
