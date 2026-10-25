@@ -1,141 +1,186 @@
 # Study Planner API
 
-## Project Description
+## 1. Project Description
 
-Study Planner API is a RESTful API developed using Python and FastAPI. It helps users organize and manage their study tasks through different API operations.
+The **Study Planner API** is a RESTful API developed using Python and FastAPI. It helps users organize, manage, and track their study tasks through various API operations.
 
-Each task contains a title, subject, priority, completion status, and estimated study time.
+Each study task contains a title, subject, priority level, completion status, and estimated study time. The API supports creating, retrieving, updating, deleting, filtering, searching, sorting, and summarizing study tasks.
 
-## Features
+It also uses Pydantic for request data validation and provides interactive API documentation through Swagger UI.
 
-- View all study tasks.
-- Retrieve a specific task using its ID.
+## 2. Features
+
+- Retrieve all study tasks.
+- Retrieve a specific task using its unique ID.
 - Create new study tasks.
-- Update existing tasks.
-- Delete tasks.
+- Update existing study tasks.
+- Delete study tasks.
 - Automatically generate unique task IDs.
-- Validate task data using Pydantic.
+- Validate request data using Pydantic.
 - Filter tasks by subject, completion status, and priority.
 - Search tasks by title.
 - Sort tasks by title or estimated study time.
-- Paginate task results using `skip` and `limit`.
+- Paginate task results using `skip` and `limit` parameters.
 - View a summary of completed tasks, pending tasks, and estimated study time.
-- Handle errors when a task does not exist.
-- Use automatically generated API documentation through Swagger UI.
+- Handle errors when a requested task does not exist.
+- Access automatically generated API documentation through Swagger UI and ReDoc.
 
-## Technologies Used
+## 3. Technologies Used
 
-- Python
-- FastAPI
-- Uvicorn
-- Pydantic
-- Swagger UI
+| Technology | Purpose |
+|---|---|
+| Python | Main programming language |
+| FastAPI | Building RESTful API endpoints |
+| Uvicorn | Running the ASGI application server |
+| Pydantic | Validating and managing request data |
+| Swagger UI | Interactive API documentation and testing |
+| ReDoc | Alternative API documentation interface |
 
-## Project Structure
+## 4. Project Structure
 
-study_planner_api/\
-├── app/\
-│   ├── init.py\
-│   ├── routers/\
-│   │   ├── init.py\
-│   │   └── tasks.py\
-│   └── schemas/\
-│       ├── init.py\
-│       └── task.py\
-├── screenshots/\
-├── main.py\
-├── requirements.txt\
-├── README.md\
+
+study_planner_api/
+├── app/
+│   ├── __init__.py
+│   ├── routers/
+│   │   ├── __init__.py
+│   │   └── tasks.py
+│   └── schemas/
+│       ├── __init__.py
+│       └── task.py
+├── screenshots/
+├── main.py
+├── requirements.txt
+├── README.md
 └── .gitignore
 
-Note: The `venv/` virtual environment and Python cache files are local development files and should not be uploaded to GitHub.
 
-## Installation and Setup
+## 5. Installation and Setup
 
-### 1. Clone the Repository
+### Step 1: Clone the Repository
 
-git clone [https://github.com/Asmita456/study-planner-api.git](https://github.com/Asmita456/study-planner-api.git?utm_source=chatgpt.com)\
+--Open PowerShell or a terminal and run:
+
+git clone https://github.com/Asmita456/study-planner-api.git
+
+
+--Navigate to the project directory:
+
 cd study-planner-api
 
-### 2. Create a Virtual Environment
+
+### Step 2: Create a Virtual Environment
 
 python -m venv venv
 
-### 3. Activate the Virtual Environment
 
-For Windows PowerShell:
+### Step 3: Activate the Virtual Environment
+
+--For Windows PowerShell:
 
 .\venv\Scripts\Activate.ps1
 
-### 4. Install Dependencies
+
+--For Windows Command Prompt:
+
+venv\Scripts\activate.bat
+
+
+### Step 4: Install Dependencies
+
+--Install the required Python packages:
+
 
 python -m pip install -r requirements.txt
 
-### 5. Run the Application
 
-Run the following command from the project root directory, where `main.py` is located:
+### Step 5: Run the Application
+
+--Run the following command from the project root directory, where `main.py` is located:
+
 
 uvicorn main:app --reload
 
-The API will be available at:
 
-- API: [http://127.0.0.1:8000](http://127.0.0.1:8000?utm_source=chatgpt.com)
-- Swagger UI: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs?utm_source=chatgpt.com)
-- ReDoc: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc?utm_source=chatgpt.com)
+--Once the server starts successfully, the API will be available at the following addresses:
 
-## API Documentation
+- **API Base URL:** http://127.0.0.1:8000
+- **Swagger UI:** http://127.0.0.1:8000/docs
+- **ReDoc:** http://127.0.0.1:8000/redoc
 
-FastAPI automatically generates interactive API documentation using Swagger UI.
+The `--reload` option automatically restarts the development server when changes are made to the application code.
 
-To test an endpoint:
+**Note:** The server must be running to access these local URLs.
 
-1. Open [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs?utm_source=chatgpt.com) in your browser.
-2. Expand the endpoint.
-3. Click Try it out.
-4. Enter the required parameters or JSON request body.
-5. Click Execute.
-6. Review the response body and HTTP status code.
+## 6. API Documentation
 
-## API Endpoints
+FastAPI automatically generates interactive API documentation based on the application's endpoints and data schemas.
 
-| HTTP Method | Endpoint           | Description                 |
-| ----------- | ------------------ | --------------------------- |
-| GET         | `/`                | Display the welcome message |
-| GET         | `/tasks`           | Retrieve and filter tasks   |
-| GET         | `/tasks/{task_id}` | Retrieve a specific task    |
-| POST        | `/tasks`           | Create a new task           |
-| PUT         | `/tasks/{task_id}` | Update an existing task     |
-| DELETE      | `/tasks/{task_id}` | Delete a task               |
-| GET         | `/tasks/summary`   | View the task summary       |
+To test the API using Swagger UI:
 
-## Task Fields and Validation
+1. Start the application using Uvicorn.
+2. Open http://127.0.0.1:8000/docs in a web browser.
+3. Expand the endpoint you want to test.
+4. Click **Try it out**.
+5. Enter the required parameters or JSON request body.
+6. Click **Execute**.
+7. Review the response body and HTTP status code.
 
-| Field               | Description                     | Validation                               |
-| ------------------- | ------------------------------- | ---------------------------------------- |
-| `id`                | Unique task identifier          | Generated automatically by the server    |
-| `title`             | Name of the study task          | At least 3 characters                    |
-| `subject`           | Subject or study area           | At least 2 characters                    |
-| `priority`          | Priority level                  | `low`, `medium`, or `high`               |
-| `completed`         | Completion status               | Defaults to `false` when creating a task |
-| `estimated_minutes` | Estimated study time in minutes | Integer between 1 and 480                |
+Alternatively, open http://127.0.0.1:8000/redoc to view the API documentation in ReDoc.
 
-The PUT endpoint requires all editable fields: `title`, `subject`, `priority`, `completed`, and `estimated_minutes`. The task ID cannot be changed through the request body.
+## 7. API Endpoints
 
-Invalid request data is rejected with HTTP `422 Unprocessable Entity`.
+| HTTP Method | Endpoint | Description |
+|---|---|---|
+| GET | `/` | Display the welcome message |
+| GET | `/tasks` | Retrieve and filter study tasks |
+| GET | `/tasks/{task_id}` | Retrieve a specific task |
+| POST | `/tasks` | Create a new study task |
+| PUT | `/tasks/{task_id}` | Update an existing task |
+| DELETE | `/tasks/{task_id}` | Delete a study task |
+| GET | `/tasks/summary` | View the task summary |
 
-## Example Requests
 
-### 1. Get Incomplete Python Tasks
+## 8. Task Fields and Validation
+
+Each study task contains the following fields:
+
+| Field | Description | Validation |
+|---|---|---|
+| `id` | Unique task identifier | Generated automatically by the server |
+| `title` | Name of the study task | At least 3 characters |
+| `subject` | Subject or study area | At least 2 characters |
+| `priority` | Priority level | `low`, `medium`, or `high` |
+| `completed` | Task completion status | Defaults to `false` when creating a task |
+| `estimated_minutes` | Estimated study time in minutes | Integer between 1 and 480 |
+
+The `PUT /tasks/{task_id}` endpoint requires all editable fields: `title`, `subject`, `priority`, `completed`, and `estimated_minutes`.
+
+The task ID is generated by the server and cannot be changed through the request body.
+
+Invalid request data is rejected with HTTP status code `422 Unprocessable Entity`. If a requested task does not exist, the API returns an appropriate error response.
+
+## 9. Example API Requests
+
+### 9.1 Retrieve Incomplete Python Tasks
+
+**Endpoint:**
 
 GET /tasks?subject=python&completed=false
 
-This returns tasks whose subject is Python and whose completion status is false. Subject matching is case-insensitive.
 
-### 2. Create a New Study Task
+**Description:**
 
-Endpoint: `POST /tasks`
+This request retrieves study tasks whose subject matches Python and whose completion status is `false`. Subject matching is case-insensitive.
 
-Request body:
+### 9.2 Create a New Study Task
+
+**Endpoint:**
+
+POST /tasks
+
+
+**Request Body:**
 
 {
   "title": "Practice FastAPI",
@@ -145,7 +190,8 @@ Request body:
 }
 
 
-Successful Response — 201 Created:
+**Successful Response — HTTP 201 Created:**
+
 {
   "id": 6,
   "title": "Practice FastAPI",
@@ -155,4 +201,97 @@ Successful Response — 201 Created:
   "estimated_minutes": 75
 }
 
-Note: The task ID in the response is an example. The actual ID depends on the tasks currently stored in memory.
+
+**Note:** The task ID `6` is an example. The actual ID depends on the tasks currently stored by the application.
+
+### 9.3 Retrieve a Specific Task
+
+**Endpoint:**
+
+GET /tasks/1
+
+This request retrieves the task with ID `1`, if it exists.
+
+### 9.4 Update an Existing Task
+
+**Endpoint:**
+
+PUT /tasks/1
+
+
+**Request Body:**
+
+{
+  "title": "Complete FastAPI Practice",
+  "subject": "Backend",
+  "priority": "high",
+  "completed": true,
+  "estimated_minutes": 90
+}
+
+This request updates the editable fields of the task with ID `1`, if it exists.
+
+### 9.5 Delete a Task
+
+**Endpoint:**
+
+DELETE /tasks/1
+
+
+This request deletes the task with ID `1`, if it exists.
+
+### 9.6 View the Task Summary
+
+**Endpoint:**
+
+GET /tasks/summary
+
+
+This endpoint provides a summary of completed tasks, pending tasks, and estimated study time, according to the application's implementation.
+
+## 10. Error Handling and Data Validation
+
+The API uses Pydantic schemas to validate incoming request data and maintain consistency in study task information.
+
+Common HTTP status codes include:
+
+| Status Code | Meaning |
+|---|---|
+| `200 OK` | The request was successful |
+| `201 Created` | A new study task was created successfully |
+| `404 Not Found` | The requested task does not exist |
+| `422 Unprocessable Entity` | The request data failed validation |
+
+The API returns appropriate error responses when a task cannot be found or when the submitted data does not satisfy the defined validation rules.
+
+## 11. Data Storage
+
+The application stores study tasks in memory, according to its current implementation. Therefore, the data is temporary and may be lost when the application restarts.
+
+A database can be integrated in the future to provide persistent storage.
+
+## 12. Future Enhancements
+
+Potential improvements include:
+
+- Integrating a database such as SQLite or PostgreSQL.
+- Implementing user registration and authentication.
+- Associating study tasks with individual users.
+- Adding due dates, reminders, and study schedules.
+- Tracking study progress and productivity statistics.
+- Developing a frontend interface for easier task management.
+
+## 13. Conclusion
+
+The Study Planner API demonstrates the development of a RESTful API using Python and FastAPI. It provides essential task management operations, data validation, filtering, searching, sorting, pagination, and summary functionality.
+
+This project provides practical experience with API development, HTTP methods, request and response handling, Pydantic schemas, error handling, and automatic API documentation.
+
+## 14. Repository
+
+**GitHub Repository:** https://github.com/Asmita456/study-planner-api
+
+## 15. Author
+
+Asmita Pandeya
+
