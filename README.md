@@ -1,4 +1,3 @@
-
 # Study Planner API
 
 ## Project Description
@@ -14,13 +13,15 @@ Each task contains a title, subject, priority, completion status, and estimated 
 - Create new study tasks.
 - Update existing tasks.
 - Delete tasks.
+- Automatically generate unique task IDs.
+- Validate task data using Pydantic.
 - Filter tasks by subject, completion status, and priority.
 - Search tasks by title.
 - Sort tasks by title or estimated study time.
-- Paginate task results using skip and limit.
-- View a summary of tasks, including completed tasks, pending tasks, and estimated study time.
+- Paginate task results using `skip` and `limit`.
+- View a summary of completed tasks, pending tasks, and estimated study time.
 - Handle errors when a task does not exist.
-- Automatically generated API documentation using Swagger UI.
+- Use automatically generated API documentation through Swagger UI.
 
 ## Technologies Used
 
@@ -32,185 +33,126 @@ Each task contains a title, subject, priority, completion status, and estimated 
 
 ## Project Structure
 
-```text
-study_planner_api/
-├── app/
-│   ├── main.py
-│   ├── routers/
-│   │   └── tasks.py
-│   └── schemas/
-│       └── task.py
-├── README.md
-└── venv/
-```
+study_planner_api/\
+├── app/\
+│   ├── init.py\
+│   ├── routers/\
+│   │   ├── init.py\
+│   │   └── tasks.py\
+│   └── schemas/\
+│       ├── init.py\
+│       └── task.py\
+├── screenshots/\
+├── main.py\
+├── requirements.txt\
+├── README.md\
+└── .gitignore
 
-*Note: The virtual environment folder is local and should not be uploaded to GitHub.*
+Note: The `venv/` virtual environment and Python cache files are local development files and should not be uploaded to GitHub.
 
 ## Installation and Setup
 
 ### 1. Clone the Repository
 
-Replace the placeholder with your actual GitHub repository URL.
-
-```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-cd study_planner_api
-```
+git clone [https://github.com/Asmita456/study-planner-api.git](https://github.com/Asmita456/study-planner-api.git?utm_source=chatgpt.com)\
+cd study-planner-api
 
 ### 2. Create a Virtual Environment
 
-```bash
 python -m venv venv
-```
 
 ### 3. Activate the Virtual Environment
 
 For Windows PowerShell:
 
-```powershell
 .\venv\Scripts\Activate.ps1
-```
 
 ### 4. Install Dependencies
 
-```bash
-pip install fastapi uvicorn
-```
+python -m pip install -r requirements.txt
 
 ### 5. Run the Application
 
-Run the following command from the project root directory:
+Run the following command from the project root directory, where `main.py` is located:
 
-```bash
-uvicorn app.main:app --reload
-```
+uvicorn main:app --reload
 
 The API will be available at:
 
-http://127.0.0.1:8000
+- API: [http://127.0.0.1:8000](http://127.0.0.1:8000?utm_source=chatgpt.com)
+- Swagger UI: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs?utm_source=chatgpt.com)
+- ReDoc: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc?utm_source=chatgpt.com)
 
 ## API Documentation
 
-FastAPI automatically generates interactive API documentation.
-
-Open Swagger UI in your browser:
-
-http://127.0.0.1:8000/docs
+FastAPI automatically generates interactive API documentation using Swagger UI.
 
 To test an endpoint:
 
-1. Expand the endpoint.
-2. Click **Try it out**.
-3. Enter the required parameters or JSON request body.
-4. Click **Execute**.
-5. Review the response and HTTP status code.
+1. Open [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs?utm_source=chatgpt.com) in your browser.
+2. Expand the endpoint.
+3. Click Try it out.
+4. Enter the required parameters or JSON request body.
+5. Click Execute.
+6. Review the response body and HTTP status code.
 
 ## API Endpoints
 
-| HTTP Method | Endpoint | Description |
-|---|---|---|
-| GET | `/` | Display the welcome message |
-| GET | `/tasks` | Retrieve and filter tasks |
-| GET | `/tasks/summary` | View the task summary |
-| GET | `/tasks/{task_id}` | Retrieve a specific task |
-| POST | `/tasks` | Create a new task |
-| PUT | `/tasks/{task_id}` | Update an existing task |
-| DELETE | `/tasks/{task_id}` | Delete a task |
+| HTTP Method | Endpoint           | Description                 |
+| ----------- | ------------------ | --------------------------- |
+| GET         | `/`                | Display the welcome message |
+| GET         | `/tasks`           | Retrieve and filter tasks   |
+| GET         | `/tasks/{task_id}` | Retrieve a specific task    |
+| POST        | `/tasks`           | Create a new task           |
+| PUT         | `/tasks/{task_id}` | Update an existing task     |
+| DELETE      | `/tasks/{task_id}` | Delete a task               |
+| GET         | `/tasks/summary`   | View the task summary       |
 
-## Task Fields
+## Task Fields and Validation
 
-Each task contains the following fields:
+| Field               | Description                     | Validation                               |
+| ------------------- | ------------------------------- | ---------------------------------------- |
+| `id`                | Unique task identifier          | Generated automatically by the server    |
+| `title`             | Name of the study task          | At least 3 characters                    |
+| `subject`           | Subject or study area           | At least 2 characters                    |
+| `priority`          | Priority level                  | `low`, `medium`, or `high`               |
+| `completed`         | Completion status               | Defaults to `false` when creating a task |
+| `estimated_minutes` | Estimated study time in minutes | Integer between 1 and 480                |
 
-- `id`: Unique identifier of the task.
-- `title`: Name of the study task.
-- `subject`: Subject or study area.
-- `priority`: Priority level of the task.
-- `completed`: Indicates whether the task is completed.
-- `estimated_minutes`: Estimated time required to complete the task, in minutes.
+The PUT endpoint requires all editable fields: `title`, `subject`, `priority`, `completed`, and `estimated_minutes`. The task ID cannot be changed through the request body.
 
-## Example Request Body
+Invalid request data is rejected with HTTP `422 Unprocessable Entity`.
 
-Use the following JSON when creating a task:
+## Example Requests
 
-```json
+### 1. Get Incomplete Python Tasks
+
+GET /tasks?subject=python&completed=false
+
+This returns tasks whose subject is Python and whose completion status is false. Subject matching is case-insensitive.
+
+### 2. Create a New Study Task
+
+Endpoint: `POST /tasks`
+
+Request body:
+
 {
+  "title": "Practice FastAPI",
+  "subject": "Backend",
+  "priority": "high",
+  "estimated_minutes": 75
+}
+
+
+Successful Response — 201 Created:
+{
+  "id": 6,
   "title": "Practice FastAPI",
   "subject": "Backend",
   "priority": "high",
   "completed": false,
   "estimated_minutes": 75
 }
-```
 
-The API generates the task ID automatically.
-
-## Filtering, Searching, Sorting, and Pagination
-
-The `GET /tasks` endpoint supports the following query parameters:
-
-| Parameter | Description |
-|---|---|
-| `subject` | Filter tasks by subject |
-| `completed` | Filter by completion status |
-| `search` | Search within task titles |
-| `priority` | Filter by priority |
-| `skip` | Number of tasks to skip; default is 0 |
-| `limit` | Maximum number of tasks returned; default is 10, maximum is 20 |
-| `sort_by` | Sort by `title` or `estimated_minutes` |
-| `order` | Sort in ascending (`asc`) or descending (`desc`) order |
-
-### Example Query
-
-```text
-/tasks?subject=Python&completed=false
-```
-
-This returns incomplete tasks whose subject is Python, subject to the default sorting and pagination settings.
-
-Another example:
-
-```text
-/tasks?sort_by=estimated_minutes&order=desc&skip=0&limit=5
-```
-
-This returns up to five tasks sorted by estimated study time from highest to lowest.
-
-## Task Summary
-
-The `GET /tasks/summary` endpoint provides an overview of study tasks, including:
-
-- Total number of tasks.
-- Number of completed tasks.
-- Number of pending tasks.
-- Total estimated study time for all tasks.
-- Remaining estimated study time for incomplete tasks.
-
-## HTTP Status Codes
-
-| Status Code | Meaning |
-|---|---|
-| `200 OK` | Request completed successfully |
-| `201 Created` | A new task was created successfully |
-| `204 No Content` | A task was deleted successfully |
-| `400 Bad Request` | Invalid sorting parameter |
-| `404 Not Found` | The requested task does not exist |
-
-### Example Error Response
-
-If a task with the requested ID does not exist, the API returns:
-
-```json
-{
-  "detail": "Task not found"
-}
-```
-
-## Data Storage
-
-The current implementation stores tasks in an in-memory Python list. No database is used.
-
-As a result, task changes are temporary and may be lost when the application restarts.
-
-## Author
-
-**Asmita Pandeya**
+Note: The task ID in the response is an example. The actual ID depends on the tasks currently stored in memory.
