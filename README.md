@@ -38,7 +38,7 @@ It also uses Pydantic for request data validation and provides interactive API d
 
 ## 4. Project Structure
 
-
+```text
 study_planner_api/
 ├── app/
 │   ├── __init__.py
@@ -53,7 +53,7 @@ study_planner_api/
 ├── main.py
 ├── README.md
 └── requirements.txt
-
+```
 
 
 ## 5. Installation and Setup
